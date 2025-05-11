@@ -76,47 +76,54 @@
     <p id="status-message" style="display: none; color: green;"></p>
 
     <script>
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent the default form submission
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the default form submission
 
-            let username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const url = 'https://vm.arc-n.uk/admin/mail/users/post';
+        let username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const url = 'https://vm.arc-n.uk/admin/mail/users/post';
 
-            // Append @f.arc-n.uk to the username
-            username += '@f.arc-n.uk';
+        // Append @f.arc-n.uk to the username
+        username += '@f.arc-n.uk';
 
-            const formData = new URLSearchParams();
-            formData.append('username', username);
-            formData.append('password', password);
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('password', password);
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + btoa('albie@arc-n.uk:albie@arc-n.uk')
-                },
-                body: formData.toString(),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                // Show "Done" message
-                const statusMessage = document.getElementById('status-message');
-                statusMessage.textContent = 'Done! Your information has been submitted.';
-                statusMessage.style.display = 'block';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + btoa('albie@arc-n.uk:albie@arc-n.uk')
+            },
+            body: formData.toString(),
+        })
+        .then(response => {
+            // Check if the response is valid (i.e., status code 200-299)
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();  // Only try to parse as JSON if successful
+        })
+        .then(data => {
+            console.log(data);
+            // Show "Done" message
+            const statusMessage = document.getElementById('status-message');
+            statusMessage.textContent = 'Done! Your information has been submitted.';
+            statusMessage.style.display = 'block';
 
-                // Redirect after 3 seconds
-                setTimeout(function() {
-                    window.location.href = 'https://arc-n.uk/mail-after.html';  // Redirect to mail-after.html
-                }, 3000);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error with the request.');
-            });
+            // Redirect after 3 seconds
+            setTimeout(function() {
+                window.location.href = 'https://arc-n.uk/mail-after.html';  // Redirect to mail-after.html
+            }, 3000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error with the request.');
         });
-    </script>
+    });
+</script>
+
 
 </body>
 </html>
