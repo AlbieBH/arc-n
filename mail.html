@@ -33,7 +33,7 @@
 
             let username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const url = 'https://proxy.cors.sh/https://vm.arc-n.uk/admin/mail/users/post';
+            const url = 'https://vm.arc-n.uk/admin/mail/users/post';
 
             // Append @f.arc-n.uk to the username
             username += '@f.arc-n.uk';
@@ -46,8 +46,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + btoa('albie@arc-n.uk:albie@arc-n.uk'),
-                    'x-cors-api-key': 'temp_46bd49e23bd564ecaf3a8b8c15e45cda' // Required by cors.sh
+                    'Authorization': 'Basic ' + btoa('albie@arc-n.uk:albie@arc-n.uk')
                 },
                 body: formData.toString(),
             })
