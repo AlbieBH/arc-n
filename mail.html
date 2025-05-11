@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Form with Authentication</title>
+</head>
+<body>
+
+    <h2>Login Form</h2>
+
+    <form id="login-form">
+        <label for="username">Username (Before The @):</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="status-message" style="display: none; color: green;"></p>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            let username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const url = 'https://vm.arc-n.uk/admin/mail/users/post';
+
+            // Append @f.arc-n.uk to the username
+            username += '@f.arc-n.uk';
+
+            const formData = new URLSearchParams();
+            formData.append('username', username);
+            formData.append('password', password);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + btoa('albie@arc-n.uk:albie@arc-n.uk'),  // Basic Authentication
+                },
+                body: formData.toString(),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Show "Done" message
+                const statusMessage = document.getElementById('status-message');
+                statusMessage.textContent = 'Done! Your information has been submitted.';
+                statusMessage.style.display = 'block';
+
+                // Redirect after 3 seconds
+                setTimeout(function() {
+                    window.location.href = 'mail-after.html';  // Redirect to mail-after.html
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error with the request.');
+            });
+        });
+    </script>
+
+</body>
+</html>
